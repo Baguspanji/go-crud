@@ -7,7 +7,7 @@ import (
 )
 
 func PostRouter(r *gin.Engine) {
-	postGroup := r.Group("/post", middleware.RequireAuth)
+	postGroup := r.Group("/post").Use(middleware.RequireAuth)
 	{
 		postGroup.GET("/", controllers.GetPosts)
 		postGroup.GET("/:id", controllers.GetPost)

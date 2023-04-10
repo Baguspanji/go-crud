@@ -13,7 +13,6 @@ import (
 
 func RequireAuth(c *gin.Context) {
 	tokenString := c.Request.Header["Authorization"]
-	fmt.Printf(tokenString[0])
 
 	if tokenString == nil {
 		c.AbortWithStatus(401)
