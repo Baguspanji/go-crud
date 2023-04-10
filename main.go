@@ -1,8 +1,8 @@
 package main
 
 import (
-	"github.com/baguspanji/go-crud/controllers"
 	"github.com/baguspanji/go-crud/initializers"
+	"github.com/baguspanji/go-crud/routers"
 	"github.com/gin-gonic/gin"
 )
 
@@ -21,14 +21,8 @@ func main() {
 		})
 	})
 
-	postGroup := r.Group("/post")
-	{
-		postGroup.GET("/", controllers.GetPosts)
-		postGroup.GET("/:id", controllers.GetPost)
-		postGroup.POST("/", controllers.CreatePost)
-		postGroup.PUT("/:id", controllers.UpdatePost)
-		postGroup.DELETE("/:id", controllers.DeletePost)
-	}
+	routers.AuthRouter(r)
+	routers.PostRouter(r)
 
 	r.Run()
 }
