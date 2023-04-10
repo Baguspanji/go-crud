@@ -1,0 +1,27 @@
+name: Docker Compose
+
+on:
+  push:
+    branches: [ "staging" ]
+
+jobs:
+  cd:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v1
+
+    - name: Deploy Using ssh
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USERNAME }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        port: 22
+        script: |
+          cd ~/app/go-crud
+          git pull origin staging
+          git status
+          docker-compose stop
+          docker-compose build
+          docker-compose up -d
