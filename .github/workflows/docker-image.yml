@@ -22,3 +22,26 @@ jobs:
           cd ~/app/go-crud
           git pull origin staging
           git status
+
+    - name: create docker image
+      uses: actions/checkout@v2
+      with:
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USERNAME }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        port: 22
+        script: |
+          cd ~/app/go-crud
+          docker-compose stop
+          docker-compose build
+
+    - name: run docker image
+      uses: actions/checkout@v3
+      with:
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USERNAME }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        port: 22
+        script: |
+          cd ~/app/go-crud
+          docker-compose up -d
