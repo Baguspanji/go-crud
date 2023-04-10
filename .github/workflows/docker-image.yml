@@ -13,8 +13,24 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name : get to directory
-      run: cd /home/bagusp/app/go-crud
-    - uses: actions/checkout@v3
-    - name: Build the Docker image
-      run: docker-compose build
+    - uses: actions/checkout@v1
+
+    - name: Copy repository contents via scp
+      uses: Baguspanji/go-crud@staging
+      env:
+        HOST: ${{ DEPLOYMENT.HOST }}
+        USERNAME: ${{ DEPLOYMENT.USERNAME }}
+        PORT: ${{ DEPLOYMENT.PORT }}
+        KEY: ${{ DEPLOYMENT.SSHKEY }}
+      with:
+        source: "."
+        target: "/var/www/mywebsite"
+
+    - name: Executing remote command
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ DEPLOYMENT.HOST }}
+        USERNAME: ${{ DEPLOYMENT.USERNAME }}
+        PORT: ${{ DEPLOYMENT.PORT }}
+        KEY: ${{ DEPLOYMENT.SSHKEY }}
+        script: ls
