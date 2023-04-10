@@ -7,30 +7,20 @@ on:
     branches: [ "staging" ]
 
 jobs:
-
-  build:
-
+  cd:
     runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v1
 
-    - name: Copy repository contents via scp
-      uses: Baguspanji/go-crud@staging
-      env:
-        HOST: ${{ secrets.HOST }}
-        USERNAME: ${{ secrets.USERNAME }}
-        PORT: ${{ secrets.PORT }}
-        KEY: ${{ secrets.SSHKEY }}
-      with:
-        source: "."
-        target: "/"
-
-    - name: Executing remote command
-      uses: appleboy/ssh-action@master
+    - name: Deploy Using ssh
+      uses: appleboy/ssh-action@staging
       with:
         host: ${{ secrets.HOST }}
-        USERNAME: ${{ secrets.USERNAME }}
-        PORT: ${{ secrets.PORT }}
-        KEY: ${{ secrets.SSHKEY }}
-        script: ls
+        username: ${{ secrets.USERNAME }}
+        key: ${{ secrets.SSHKEY }}
+        port: ${{ secrets.PORT }}
+        script: |
+          cd ~/app/go-crud
+          git pull origin staging
+          git status
