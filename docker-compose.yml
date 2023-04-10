@@ -7,12 +7,10 @@ services:
       dockerfile: Dockerfile
     ports:
       - "3000:8080"
-    volumes:
-      - .:/go/src/app
     networks:
       - internal-net
 
 networks:
   internal-net:
     driver: bridge
-    name: database_docker_net
+    name: database_net
